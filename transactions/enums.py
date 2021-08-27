@@ -1,6 +1,10 @@
-from enum import IntEnum
-from typing import Optional
+from __future__ import annotations
 
+from enum import IntEnum
+from typing import Optional, List
+
+class TransactionTypeParseError(ValueError):
+    pass
 
 class TransactionType(IntEnum):
     """
@@ -17,24 +21,24 @@ class TransactionType(IntEnum):
     ORDER_RETROCHARGE = 7
 
     @classmethod
-    def choices(cls):
+    def choices(cls) -> List:
         return [(key.value, key.name) for key in cls]
 
     @classmethod
-    def text_to_enum(cls, text: Optional[str] = None):
+    def text_to_enum(cls, text: Optional[str] = None) -> TransactionType:
         if not text:
             return TransactionType.NOT_DEFINED
-
+        text = text.lower()
         map_enum = {
-            "Order": TransactionType.ORDER,
-            "FBA Inventory Fee": TransactionType.FBA_INVENTORY_FEE,
-            "Adjustment": TransactionType.ADJUSTMENT,
-            "FBA Customer Return Fee": TransactionType.FBA_CUSTOMER_RETURN_FEE,
-            "Refund": TransactionType.REFUND,
-            "Transfer": TransactionType.TRANSFER,
-            "Order_Retrocharge": TransactionType.ORDER_RETROCHARGE,
+            "order": TransactionType.ORDER,
+            "fba inventory fee": TransactionType.FBA_INVENTORY_FEE,
+            "adjustment": TransactionType.ADJUSTMENT,
+            "fda customer return fee": TransactionType.FBA_CUSTOMER_RETURN_FEE,
+            "refund": TransactionType.REFUND,
+            "transfer": TransactionType.TRANSFER,
+            "order_retrocharge": TransactionType.ORDER_RETROCHARGE,
         }
         match = map_enum.get(text)
         if not match:
-            raise ValueError("Cannot find enum from string")
+            raise TransactionTypeParseError(f"Cannot find enum from string - {text}")
         return match

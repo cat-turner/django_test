@@ -3,6 +3,7 @@ from django.db import models
 from transactions.enums import TransactionType
 from typing import Optional
 import re
+from utils.us_states import STATES_NORMALIZED
 
 
 # Create your models here.
@@ -37,6 +38,18 @@ class MoneyField(models.IntegerField):
         return super(MoneyField, self).formfield(**defaults)
 
 
+class StateField(models.CharField):
+    description = "A field that normalizes a state name if it is in US. If not, saves it in the original form"
+
+    def get_db_prep_value(self, value: Optional[str], *args, **kwargs):
+        if value is None:
+            return None
+        value = value.lower()
+        # if org value returned it means
+        # that value is likely not a US state, save as-is
+        return STATES_NORMALIZED.get(value, value)
+
+
 class TransactionDescription(models.Model):
     """
     Descriptions used in FBATransaction
@@ -53,8 +66,8 @@ class TransactionDescription(models.Model):
         ]
 
     # char limit set to 200 but it can be bumped to something higher
-    description_text = models.CharField(max_length=200)
-    sku_text = models.CharField(max_length=100)
+    description_text = models.CharField(max_length=200, null=True, blank=True)
+    sku_text = models.CharField(max_length=100, null=True, blank=True)
 
 
 def validate_zip(input: Optional[str]) -> None:
@@ -98,8 +111,8 @@ class FBATransaction(models.Model):
     sku_text = models.CharField(max_length=100)
     total = MoneyField(null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
-    state = models.CharField(max_length=100, null=True, blank=True)
+    state = StateField(max_length=100, null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)
     postal = models.CharField(
-        max_length=100, null=True, blank=True, validators=[validate_zip]
+        max_length=10, null=True, blank=True, validators=[validate_zip]
     )
