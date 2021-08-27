@@ -9,6 +9,7 @@ from rest_framework.response import Response
 # *** This will be highly relevant ***
 # https://docs.djangoproject.com/en/3.1/topics/db/queries/
 
+
 class TransactionsListView(GenericAPIView):
     """
     Handles retrieving and creating transactions

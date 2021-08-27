@@ -19,7 +19,7 @@ from django.urls import path
 from transactions.views import TransactionsListView, TransactionsStatsView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/transactions/', TransactionsListView.as_view()),
-    path('api/transactions/stats/', TransactionsStatsView.as_view()),
+    path("admin/", admin.site.urls),
+    path("api/transactions/", TransactionsListView.as_view()),
+    path("api/transactions/stats/", TransactionsStatsView.as_view()),
 ]
