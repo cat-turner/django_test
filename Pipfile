@@ -6,8 +6,11 @@ name = "pypi"
 [packages]
 django = "==3.1.2"
 djangorestframework = "*"
+dateparser = "*"
+black = "*"
 
 [dev-packages]
+black = "*"
 
 [requires]
 python_version = "3.9"

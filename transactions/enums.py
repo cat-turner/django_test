@@ -1,24 +1,26 @@
 from __future__ import annotations
 
-from enum import IntEnum
-from typing import Optional, List
+from enum import Enum
+from typing import List, Optional
+
 
 class TransactionTypeParseError(ValueError):
     pass
 
-class TransactionType(IntEnum):
+
+class TransactionType(Enum):
     """
     A class that defines supported transaction types. Can be used in models or outside of models.
     """
 
-    NOT_DEFINED = 0
-    ORDER = 1
-    FBA_INVENTORY_FEE = 2
-    ADJUSTMENT = 3
-    FBA_CUSTOMER_RETURN_FEE = 4
-    REFUND = 5
-    TRANSFER = 6
-    ORDER_RETROCHARGE = 7
+    NOT_DEFINED = "NOT_DEFINED"
+    ORDER = "ORDER"
+    FBA_INVENTORY_FEE = "FBA_INVENTORY_FEE"
+    ADJUSTMENT = "ADJUSTMENT"
+    FBA_CUSTOMER_RETURN_FEE = "FBA_CUSTOMER_RETURN_FEE"
+    REFUND = "REFUND"
+    TRANSFER = "TRANSFER"
+    ORDER_RETROCHARGE = "ORDER_RETROCHARGE"
 
     @classmethod
     def choices(cls) -> List:
@@ -33,10 +35,15 @@ class TransactionType(IntEnum):
             "order": TransactionType.ORDER,
             "fba inventory fee": TransactionType.FBA_INVENTORY_FEE,
             "adjustment": TransactionType.ADJUSTMENT,
-            "fda customer return fee": TransactionType.FBA_CUSTOMER_RETURN_FEE,
+            "fba customer return fee": TransactionType.FBA_CUSTOMER_RETURN_FEE,
             "refund": TransactionType.REFUND,
             "transfer": TransactionType.TRANSFER,
+            "order retrocharge": TransactionType.ORDER_RETROCHARGE,
             "order_retrocharge": TransactionType.ORDER_RETROCHARGE,
+            "not_defined": TransactionType.NOT_DEFINED,
+            "fba_inventory_fee": TransactionType.FBA_INVENTORY_FEE,
+            "adjustment": TransactionType.ADJUSTMENT,
+            "fba_customer_return_fee": TransactionType.FBA_CUSTOMER_RETURN_FEE,
         }
         match = map_enum.get(text)
         if not match:

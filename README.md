@@ -22,9 +22,9 @@ You can run the server by calling `python manage.py runserver` and route request
 Assumptions:
 
 - I am assuming that the geographic data is correct and will not check if the zip code matches the city
-- Averages should only be done for the same type, because Fees are negative while orders are positive. It doesn't make sense to have fees and orders be averaged since they are different types
 - Order types are unique, and have their own meaning. For example Order and Order_Retrochange are different transaction types, and are not considered the same kind of transaction type.
-- 
+- I assume that rows can be made unique with their order id and type. This will allow us to upload
+the same file without duplicating rows
 
 Dev notes:
 I am using pipenv for dependency management. To install:
@@ -37,4 +37,18 @@ To install dependencies used for this assigment, type the commands:
 pipenv install
 ```
 
-It looks like the link you include to install django is referring to 
+Run migrations first.
+```
+./manage.py makemigrations
+./manage.py migrate
+```
+
+Start server.
+```
+python manage.py runserver
+```
+
+To upload a file, you can use curl, try this command in a different terminal:
+```
+curl -i --form docfile=@./example_transactions.csv http://127.0.0.1:8000/api/transactions/
+```
