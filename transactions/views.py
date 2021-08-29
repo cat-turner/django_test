@@ -34,7 +34,7 @@ def parse_request_params(request_data: Dict) -> Dict:
     if transaction_type:
         query_params["type"] = TransactionType.text_to_enum(transaction_type).value
     if sku_list:
-        sku_list = sku_list.split(",")
+        sku_list = sku_list.split(",") if "," in sku_list else [sku_list]
         query_params["sku__in"] = [sku.lower() for sku in sku_list]
     if start:
         query_params["date__gt"] = get_utc_time(start)
@@ -166,6 +166,9 @@ class TransactionsStatsView(GenericAPIView):
             transactions = transactions.filter(**query_params)
 
         totals = transactions.values_list("total", flat=True)
+
+        if not len(totals):
+            return Response("not enough data for results", status=status.HTTP_200_OK)
 
         transactions_sum = sum(totals)
         transactions_avg = transactions_sum / len(totals)

@@ -1,4 +1,5 @@
 import re
+
 # Create your models here.
 # https://docs.djangoproject.com/en/3.1/topics/db/models/
 # After writing model definition, run "./manage.py makemigrations" and then "./manage.py migrate"
@@ -31,7 +32,7 @@ class MoneyField(models.IntegerField):
             )
 
     def from_db_value(
-        self, value, expression, connection, context=None
+        self, value, expression=None, connection=None, context=None
     ) -> Optional[Decimal]:
         return self.to_python(value)
 
@@ -60,7 +61,7 @@ class CharNormalizedField(models.CharField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def get_prep_value(self, value: Optional[str]) -> Optional[str]:
+    def get_db_prep_value(self, value: Optional[str], *args, **kwargs) -> Optional[str]:
         if not value:
             return None
         return str(value).lower()
